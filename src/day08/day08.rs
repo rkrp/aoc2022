@@ -59,6 +59,24 @@ mod tests {
         let result = forest.is_visible(9, 92);
         assert_eq!(result, false);
     }
+
+    #[test]
+    fn part2_2_2_scores() {
+        let forest = parse_input("./src/day08/sample_input.txt");
+        let (_, score) = forest.get_stats_up(1, 2);
+        assert_eq!(score, 1);
+
+        let (_, score) = forest.get_stats_down(1, 2);
+        assert_eq!(score, 2);
+
+        let (_, score) = forest.get_stats_right(1, 2);
+        assert_eq!(score, 2);
+
+        let (_, score) = forest.get_stats_left(1, 2);
+        assert_eq!(score, 1);
+        
+        assert_eq!(forest.get_scenic_score(1, 2), 4);
+    }
 }
 
 #[derive(PartialEq,Eq)]
@@ -70,54 +88,63 @@ struct Forest {
 }
 
 impl Forest {
-    fn is_viewable_right(&self, row: usize, col: usize) -> bool {
+    fn get_stats_right(&self, row: usize, col: usize) -> (bool, usize) {
         let me = self.forest[row][col];
         for j in col+1..self.width {
             if self.forest[row][j] >= me {
-                return false;
+                return (false, j - col);
             }
         }
-        true
+        (true, self.width - col - 1)
     }
 
-    fn is_viewable_left(&self, row: usize, col: usize) -> bool {
+    fn get_stats_left(&self, row: usize, col: usize) -> (bool, usize) {
         let me = self.forest[row][col];
-        for j in 0..col {
+        for j in (0..col).rev() {
             if self.forest[row][j] >= me {
-                return false;
+                return (false, col - j);
             }
         }
-        true
+        (true, col)
     }
 
-    fn is_viewable_down(&self, row: usize, col: usize) -> bool {
+    fn get_stats_down(&self, row: usize, col: usize) -> (bool, usize) {
         let me = self.forest[row][col];
         for i in row+1..self.height {
             if self.forest[i][col] >= me {
-                return false;
+                return (false, i - row);
             }
         }
-        true
+        (true, self.height - row - 1)
     }
 
-    fn is_viewable_up(&self, row: usize, col: usize) -> bool {
+    fn get_stats_up(&self, row: usize, col: usize) -> (bool, usize) {
         let me = self.forest[row][col];
-        for i in 0..row {
+        for i in (0..row).rev() {
             if self.forest[i][col] >= me {
-                return false;
+                return (false, row - i);
             }
         }
-        true
+        (true, row)
     }
 
     fn is_visible(&self, row: usize, col: usize) -> bool {
-        let left = self.is_viewable_left(row, col);
-        let right = self.is_viewable_right(row, col);
-        let up = self.is_viewable_up(row, col);
-        let down = self.is_viewable_down(row, col);
+        let (left, _) = self.get_stats_left(row, col);
+        let (right, _) = self.get_stats_right(row, col);
+        let (up, _) = self.get_stats_up(row, col);
+        let (down, _) = self.get_stats_down(row, col);
         
         left || right || up || down
     }
+
+    fn get_scenic_score(&self, row: usize, col: usize) -> usize {
+        let (_, score_left) = self.get_stats_left(row, col);
+        let (_, score_right) = self.get_stats_right(row, col);
+        let (_, score_up) = self.get_stats_up(row, col);
+        let (_, score_down) = self.get_stats_down(row, col);
+
+        score_left * score_right * score_up * score_down
+    } 
 
     fn solve_part1(&self) -> i32 {
         let mut result = 0;
@@ -132,6 +159,22 @@ impl Forest {
                 if self.is_visible(row, col) {
                     //println!("[{}][{}] = {}", row, col, self.forest[row][col]);
                     result += 1;
+                }
+            }
+        }
+        result as i32
+    }
+
+    fn solve_part2(&self) -> i32 {
+        let mut result = 0;
+        let height = self.forest.len();
+        let width = self.forest[0].len();
+
+        for row in 1..height-1{
+            for col in 1..width-1 {
+                let score = self.get_scenic_score(row, col);
+                if score > result {
+                    result = score;
                 }
             }
         }
@@ -159,8 +202,7 @@ pub fn part1() {
 }
 
 pub fn part2() {
-    let fs = parse_input("./src/day08/sample_input.txt");
-    let mut result = 0;
-
+    let fs = parse_input("./src/day08/input.txt");
+    let result = fs.solve_part2();
     println!("ANS: {:?}", result);
 }
