@@ -8,9 +8,11 @@ mod day06;
 mod day07;
 mod day08;
 mod day09;
+mod day10;
+mod day11;
 
 fn main() {
-    let mode = String::from("d9p1");
+    let mode = String::from("d11p1");
     match &mode[..] {
         "d1p1" => day01::day01::part1(),
         "d1p2" => day01::day01::part2(),
@@ -30,6 +32,11 @@ fn main() {
         "d8p2" => day08::day08::part2(),
         "d9p1" => day09::day09::part1(),
         "d9p2" => day09::day09::part2(),
+        "d10p1" => day10::day10::part1(),
+        "d10p2" => day10::day10::part2(),
+        "d11p1" => day11::day11::part1(),
+        "d11p2" => day11::day11::part2(),
+
         _ => println!("Invalid mode!"),
     }
 }
