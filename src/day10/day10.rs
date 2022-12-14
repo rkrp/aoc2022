@@ -1,4 +1,4 @@
-use std::{fs, collections::HashMap};
+use std::fs;
 
 #[derive(PartialEq,Eq)]
 #[derive(Debug)]
@@ -70,13 +70,13 @@ fn execute(instructions: Vec<OpCode>) -> i32 {
         match opcode.operator {
             Op::NOOP => {
                 cycles += 1;
-                //result += calc_strength(cycles, x);
+                result += calc_strength(cycles, x);
                 draw_pixel(cycles, x);
             },
             Op::ADDX => {
                 for _ in 0..2 {
                     cycles += 1;
-                    //result += calc_strength(cycles, x);
+                    result += calc_strength(cycles, x);
                     draw_pixel(cycles, x);
                 }
                 x += opcode.operand;

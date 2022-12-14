@@ -36,10 +36,6 @@ mod tests {
         assert_eq!(get_score(2, 1), 0+2);
         assert_eq!(get_score(2, 2), 3+3);
     }
-
-    fn test_get_score_p2() {
-
-    }
 }
 
 

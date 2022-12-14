@@ -5,7 +5,6 @@ use petgraph::{Graph, stable_graph::NodeIndex, visit::{IntoNodeReferences}, Dire
 
 #[cfg(test)]
 mod tests {
-    use std::fs::File;
 
     use petgraph::visit::IntoNodeReferences;
 
@@ -68,10 +67,9 @@ mod tests {
     #[test]
     fn test_part2_solver() {
         let mut fs = FileSystem::new();
-        let mut cwd = fs.root;        
+        let cwd = fs.root;        
         cd_or_create_dir(&mut fs, cwd, "foo");
-
-        cwd = fs.cd(cwd, "foo").unwrap();
+        fs.cd(cwd, "foo").unwrap();
     }
 }
 

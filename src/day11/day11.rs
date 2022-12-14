@@ -217,39 +217,39 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let mut monkey0 = Monkey::new(
+        let monkey0 = Monkey::new(
             vec![79, 98], 
             Operation::new("old * 19"),
             MonkeyDecider { divisibleby: 23, iftrue: 2, iffalse: 3 },
             true,
         );
-        let mut monkey1 = Monkey::new(
+        let monkey1 = Monkey::new(
             vec![54,65,75,74], 
             Operation::new("old + 6"),
             MonkeyDecider { divisibleby: 19, iftrue: 2, iffalse: 0 },
             true,
         );
-        let mut monkey2 = Monkey::new(
+        let monkey2 = Monkey::new(
             vec![79, 60, 97], 
             Operation::new("old * old"),
             MonkeyDecider { divisibleby: 13, iftrue: 1, iffalse: 3 },
             true,
         );
-        let mut monkey3 = Monkey::new(
+        let monkey3 = Monkey::new(
             vec![74], 
             Operation::new("old + 3"),
             MonkeyDecider { divisibleby: 17, iftrue: 0, iffalse: 1 },
             true,
         );
 
-        let mut monkeys = vec![monkey0, monkey1, monkey2, monkey3];
+        let monkeys = vec![monkey0, monkey1, monkey2, monkey3];
         let result = do_monkey_business(monkeys, 20);
         assert_eq!(result, 10605);
     }
 
     #[test]
     fn test_part2() {
-        let mut monkeys = parse_input("./src/day11/sample_input.txt", false);
+        let monkeys = parse_input("./src/day11/sample_input.txt", false);
         let result = do_monkey_business(monkeys, 10000);
         assert_eq!(result, 2713310158);
     }
