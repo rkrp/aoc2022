@@ -247,9 +247,52 @@ pub fn part1() {
 }
 
 pub fn part2() {
-    // let monkeys = parse_input("./src/day11/sample_input.txt", false);
-    // let result = do_monkey_business(monkeys, 20);
-    // println!("ANS: {}", result);
+    let mut forest = parse_input("./src/day12/input.txt");
+    let dot = Dot::with_config(&forest.graph, &[Config::EdgeNoLabel]);
+    //println!("{:?}", dot);
+
+    let mut start_pos: Vec<Position> = vec![];
+    for row in 0..forest.height {
+        for col in 0..forest.width {
+            if forest.forest[row][col] == 'a' as u8 -1 || 
+                forest.forest[row][col] == 'a' as u8
+            {
+                start_pos.push(Position::new(row as i32, col as i32));
+            }
+        }
+    }
+    println!("Start positions: {:?}", start_pos);
+    let mut min = usize::MAX;
+    for start in start_pos {
+        println!("Chekcing path for {:?}", start);
+        // Get rid of all edges 
+        forest.graph.clear_edges();
+        forest.counter = HashSet::new();
+        // Generate graph again with a new start point
+        forest.gen_graph(start);
+        
+        
+        let path = petgraph::algo::astar(&forest.graph, 
+            forest.get_nodeindex(start),
+            |finish| finish == forest.get_nodeindex(forest.end),
+            |_| 1,
+            |_| 1);
+        match path {
+            Some((_, path)) => {
+                let result = path.len() - 1;
+                if result < min {
+                    min = result;
+                }
+            },
+            None => {
+                println!("Path not found for {:?}", start);
+                //let dot = Dot::with_config(&forest.graph, &[Config::EdgeNoLabel]);
+                //println!("{:?}", dot);
+                //panic!("Counter: {:?}", forest.counter);
+            }
+        };
+    }
+    println!("ANS: {}", min);
 }
 
 #[cfg(test)]
