@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, cmp::Ordering, ops::Index};
 use serde_json::{Value, json};
 
 #[derive(PartialEq,Eq)]
@@ -100,6 +100,14 @@ fn solve_one(op1:&str, op2:&str) -> CompareResult {
     return compare(&op1, &op2, level + 1);
 }
 
+fn packet_cmp(op1:&str, op2:&str) -> Ordering {
+    match solve_one(op1, op2) {
+        CompareResult::EQUAL => Ordering::Equal,
+        CompareResult::LARGE => Ordering::Greater,
+        CompareResult::SMALL => Ordering::Less,
+    }
+}
+
 pub fn part1() {
     let problems = parse_input("./src/day13/input.txt");
     let mut result = 0;
@@ -113,8 +121,20 @@ pub fn part1() {
 }
 
 pub fn part2() {
-    let packets = parse_packets("./src/day11/sample_input.txt");
+    let mut packets = parse_packets("./src/day13/input.txt");
+    // Add divider packets 
+    packets.push("[[2]]".to_string());
+    packets.push("[[6]]".to_string());
+
+    packets.sort_by(|a, b| packet_cmp(a, b));
+
+    // Find the divider packets
+    let start = packets.iter().position(|x| **x == "[[2]]".to_string()).unwrap();
+    let end = packets.iter().position(|x| **x == "[[6]]".to_string()).unwrap();
+
+    println!("Result :{}", (start + 1) * (end + 1));
     
+
     // let result = do_monkey_business(monkeys, 20);
     // println!("ANS: {}", result);
 }

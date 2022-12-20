@@ -14,7 +14,7 @@ mod day12;
 mod day13;
 
 fn main() {
-    let mode = String::from("d13p1");
+    let mode = String::from("d13p2");
     match &mode[..] {
         "d1p1" => day01::day01::part1(),
         "d1p2" => day01::day01::part2(),
