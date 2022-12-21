@@ -1,4 +1,4 @@
-use std::{fs, cmp::Ordering, ops::Index};
+use std::{fs, cmp::Ordering};
 use serde_json::{Value, json};
 
 #[derive(PartialEq,Eq)]
